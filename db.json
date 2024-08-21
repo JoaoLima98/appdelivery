@@ -1,0 +1,93 @@
+{
+    "restaurants": [
+      { 
+        "id": "1", 
+        "name": "Tocha Lanches", 
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkyQ_-oPQ8fz5Xw0EjGAEvkolV_7n6rX9dcQ&s",
+        "rate": "5.0"
+      },
+      { 
+        "id": "2", 
+        "name": "McDonald's", 
+        "image": "https://i.imgur.com/su4iB3p.png",
+        "rate": "4.0"
+      },
+      { 
+        "id": "3", 
+        "name": "Neto Lanches", 
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxHoyaMFWcOMZWeaXEkD48jGEgXzONRw6E7Q&s",
+        "rate": "4.5"
+      },
+      { 
+        "id": "4", 
+        "name": "Tai Sushi", 
+        "image": "https://i.imgur.com/ffYWFBX.png",
+        "rate": "2.0"
+      },
+      { 
+        "id": "5", 
+        "name": "Burgueruissimo", 
+        "image": "https://i.imgur.com/kmQvG2T.png",
+        "rate": "4.2"
+      },
+      { 
+        "id": "6", 
+        "name": "Almoço", 
+        "image": "https://i.imgur.com/uXRuDFD.png",
+        "rate": "3.8"
+      }
+    ],
+    "foods": [
+      { 
+        "id": "1", 
+        "name": "Frango assado", 
+        "price": 39.99,
+        "time": "50-60 min",
+        "delivery": 5.99,
+        "rating": 4.8,
+        "image": "https://i.imgur.com/CEVUdju.png",
+        "restaurantId": "1"
+  
+      },
+      { 
+        "id": "2", 
+        "name": "Marmita", 
+        "price": 29.99,
+        "time": "30-40 min",
+        "delivery": 2.99,
+        "rating": 4.9,
+        "image": "https://i.imgur.com/uXRuDFD.png",
+        "restaurantId": "6"
+      },
+      { 
+        "id": "3", 
+        "name": "Hamburgão", 
+        "price": 23.99,
+        "time": "50-60 min",
+        "delivery": 5.99,
+        "rating": 4.5,
+        "image": "https://i.imgur.com/O5c3lyU.png",
+        "restaurantId": "5"
+      },
+      { 
+        "id": "4", 
+        "name": "Picanha L", 
+        "price": 36.59,
+        "time": "50-60 min",
+        "delivery": 5.99,
+        "rating": 4.4,
+        "image": "https://i.imgur.com/0UjG3wk.png",
+        "restaurantId": "3"
+      },
+      { 
+        "id": "5", 
+        "name": "Açai 300ml", 
+        "price": 18.99,
+        "time": "20-30 min",
+        "delivery": 2.99,
+        "rating": 4.4,
+        "image": "https://i.imgur.com/BaUUCkc.png",
+        "restaurantId": "3"
+      }
+    ]
+  }
