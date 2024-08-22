@@ -11,18 +11,16 @@ const variantButtonClasses = {
   secondary: "bg-secondary",
   destructive: "bg-destructive",
   ghost: "bg-slate-700",
-  link: "text-primary underline-offset-4",
+  link: "text-primary",
 };
 
 const variantTextClasses = {
   default: "text-white",
-  link: "text-primary underline-offset-4",
+  link: "text-primary",
   secondary: "",
   destructive: "",
   ghost: "",
 };
-
-
 
 type VariantProps = {
   default: string;
@@ -42,9 +40,13 @@ type ButtonProps = {
 
 const buttonTextVariant = ({
   textClassName,
-  variant = 'default'
+  variant = "default",
 }: Omit<ButtonProps, "text">) => {
-  return cn("text-center font-medium text-lg text-white", textClassName, variantTextClasses[variant]);
+  return cn(
+    "text-center font-medium text-lg text-white",
+    textClassName,
+    variantTextClasses[variant],
+  );
 };
 
 const buttonVariant = ({
@@ -67,13 +69,14 @@ export function Button({
   isLoading = false,
   ...props
 }: ButtonProps) {
-  console.log(cn(buttonTextVariant({ textClassName })))
   return (
     <Pressable className={cn(buttonVariant({ variant, className }))} {...props}>
       {isLoading ? (
         <ActivityIndicator size="large" color="white" />
       ) : (
-        <Text className={cn(buttonTextVariant({variant, textClassName }))}>{text}</Text>
+        <Text className={cn(buttonTextVariant({ variant, textClassName }))}>
+          {text}
+        </Text>
       )}
     </Pressable>
   );

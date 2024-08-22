@@ -1,4 +1,4 @@
-import { Pressable, ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Header } from "../../../components/header";
 
 import Banner from "../../../components/banner";
@@ -6,17 +6,14 @@ import Search from "@/components/search";
 import { Section } from "@/components/section";
 import { TrendingFoods } from "@/components/trendingFoods";
 import { Stores } from "@/components/stores";
-import { useSession } from "@/contexts/auth";
 
 export default function HomeScreen() {
-  const { session } = useSession();
-
-  console.log(session);
-
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} className="mt-5">
       <Header />
-      <Search />
+      <View className="px-5 mt-5">
+        <Search />
+      </View>
       <Banner />
       <Section
         name="Compra rápida"
@@ -31,8 +28,8 @@ export default function HomeScreen() {
         label="Veja mais"
         action={() => console.log("Ação Verificadas")}
         size="text-xl"
-      ></Section>
-      <Stores></Stores>
+      />
+      <Stores />
     </ScrollView>
   );
 }

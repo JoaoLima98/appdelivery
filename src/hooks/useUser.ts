@@ -12,24 +12,25 @@ export function useUser() {
   const database = useSQLiteContext()
 
   async function create(data: Omit<UserDatabase, "id">) {
-    const statement = await database.prepareAsync(
-      "INSERT INTO users (name, password, email) VALUES ($name, $password, $email)"
-    )
+    const insertQuery = `
+      INSERT INTO users (name, password, email)
+      VALUES ('${data.name}', '${data.password}', '${data.email}')
+    `
 
     try {
-      const result = await statement.executeAsync({
-        $name: data.name,
-        $password: data.password,
-        $email: data.email
-      })
+      await database.execAsync(insertQuery)
 
-      const insertedRowId = result.lastInsertRowId.toLocaleString()
+      const selectQuery = `
+        SELECT id, name, email
+        FROM users
+        WHERE email = '${data.email}'
+        ORDER BY id DESC
+        LIMIT 1
+      `
 
-      return { insertedRowId }
+      return await database.getFirstAsync(selectQuery) as Omit<UserDatabase, "password">
     } catch (error) {
       throw error
-    } finally {
-      await statement.finalizeAsync()
     }
   }
 
@@ -112,9 +113,9 @@ export function useUser() {
       )
 
       return response[0];
-  }catch (error){
-    throw error
-  }
+    }catch (error){
+      throw error
+    }
   }
 
   return { create, searchByName, update, remove, show, getAll, userSession }
