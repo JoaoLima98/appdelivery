@@ -19,8 +19,7 @@ export function ControllerTextInput<FormType extends FieldValues>({
       render={({ field, fieldState: { error } }) => (
         <>
           <View
-            className="flex flex-row items-center w-full"
-            style={{ gap: 12 }}
+            className="flex flex-row items-center w-full gap-5"
           >
             <Input
               onChangeText={field.onChange}
