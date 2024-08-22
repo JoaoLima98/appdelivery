@@ -3,13 +3,16 @@ import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { Controller, UseControllerProps, FieldValues } from "react-hook-form";
 import { Input, InputProps } from "../ui/Input";
+import { cn } from "@/lib/cn";
 
 export function ControllerTextInput<FormType extends FieldValues>({
   control,
   name,
   passwordType,
+  messageErrorClassname,
   ...textInputProps
-}: UseControllerProps<FormType> & InputProps & { passwordType?: boolean }) {
+}: UseControllerProps<FormType> &
+  InputProps & { passwordType?: boolean; messageErrorClassname?: string }) {
   const [showPassword, setShowPassword] = useState(passwordType);
 
   return (
@@ -18,9 +21,7 @@ export function ControllerTextInput<FormType extends FieldValues>({
       name={name}
       render={({ field, fieldState: { error } }) => (
         <>
-          <View
-            className="flex flex-row items-center w-full gap-5"
-          >
+          <View className="flex flex-row items-center w-full gap-5">
             <Input
               onChangeText={field.onChange}
               onBlur={field.onBlur}
@@ -39,7 +40,12 @@ export function ControllerTextInput<FormType extends FieldValues>({
             ) : null}
           </View>
           {error?.message ? (
-            <Text className="text-red-700 font-bold -mt-4">
+            <Text
+              className={cn(
+                "text-red-700 font-bold -mt-4",
+                messageErrorClassname,
+              )}
+            >
               {error.message}
             </Text>
           ) : null}

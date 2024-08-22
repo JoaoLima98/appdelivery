@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { SessionProvider } from "@/contexts/auth";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { PaperProvider } from "react-native-paper";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,16 +27,18 @@ export default function RootLayout() {
   }
 
   return (
-    <SessionProvider>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { paddingTop: insets.top },
-        }}
-      >
-        <Stack.Screen name="(public)" />
-        <Stack.Screen name="(auth)" />
-      </Stack>
-    </SessionProvider>
+    <PaperProvider>
+      <SessionProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { paddingTop: insets.top },
+          }}
+        >
+          <Stack.Screen name="(public)" />
+          <Stack.Screen name="(auth)" />
+        </Stack>
+      </SessionProvider>
+    </PaperProvider>
   );
 }
