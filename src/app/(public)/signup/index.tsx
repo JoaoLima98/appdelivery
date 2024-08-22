@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ImageBackground } from "react-native";
+import { View, Text, ImageBackground } from "react-native";
 import { useUser } from "@/hooks/useUser";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -12,22 +12,20 @@ import { Button } from "@/components/ui/Button";
 
 export default function Login() {
   const { signIn } = useSession();
-  const { userSession, create } = useUser();
+  const { create } = useUser();
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: yupResolver(loginFormSchema),
   });
 
   const onSubmit = async (data: LoginForm) => {
-    
-
- 
-      await create(data);
-      await signIn(data)
+    try {
+      const user = await create(data);
+      await signIn(user);
       router.replace("/(auth)/");
-
-    
+    } catch (error) {
+      console.log(error);
+    }
   };
-  
 
   return (
     <View className="flex-1 justify-center">
@@ -42,15 +40,13 @@ export default function Login() {
       </ImageBackground>
 
       <View className="bg-white flex-1 p-4 gap-y-5">
-
-        
-      <ControllerTextInput
+        <ControllerTextInput
           label="Nome"
           control={control}
           name="name"
           placeholder="Digite seu nome"
         />
-        
+
         <ControllerTextInput
           control={control}
           name="email"
@@ -66,13 +62,7 @@ export default function Login() {
           passwordType
         />
 
-
-        <View>
-        <Button text="Cadastrar"
-          onPress={handleSubmit(onSubmit)}
-          />
-  
-        </View>
+        <Button text="Cadastrar" onPress={handleSubmit(onSubmit)} />
       </View>
     </View>
   );
