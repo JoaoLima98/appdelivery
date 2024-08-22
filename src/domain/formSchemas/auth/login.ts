@@ -9,9 +9,6 @@ export const loginFormSchema = yup.object({
   .string()
   .min(8, 'A senha precisa ter no minimo 8 caracteres')
   .required('Campo obrigatorio!'),
-  name: yup
-  .string()
-  .required('Campo Obrigatório!')
 })
 
 export type LoginForm = yup.InferType<typeof loginFormSchema>;
