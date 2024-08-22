@@ -9,6 +9,7 @@ import { SQLiteProvider } from "expo-sqlite";
 import { createContext, ReactNode } from "react";
 import { StoresProvider } from "@/hooks/useStores";
 import { FoodsProvider } from "@/hooks/useFoods";
+import { Dialog, DialogContext } from "@/components/ui/Dialog";
 
 const AllContext = createContext({});
 
@@ -18,11 +19,13 @@ export const AllProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AllContext.Provider value={{}}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <SQLiteProvider databaseName="test.db" onInit={initializeDatabase}>
-          <StoresProvider>
-            <FoodsProvider>{children}</FoodsProvider>
-          </StoresProvider>
-        </SQLiteProvider>
+        <Dialog>
+          <SQLiteProvider databaseName="test.db" onInit={initializeDatabase}>
+            <StoresProvider>
+              <FoodsProvider>{children}</FoodsProvider>
+            </StoresProvider>
+          </SQLiteProvider>
+        </Dialog>
       </ThemeProvider>
     </AllContext.Provider>
   );
