@@ -5,7 +5,7 @@ import useAsyncStorage from "@/hooks/useAsyncStorage";
 type AuthContextProps = {
   signIn: (data: Omit<UserDatabase, "password">) => Promise<void>;
   signOut: () => Promise<void>;
-  session: any;
+  session: Omit<UserDatabase, "password">;
 };
 
 const AuthContext = React.createContext({} as AuthContextProps);
