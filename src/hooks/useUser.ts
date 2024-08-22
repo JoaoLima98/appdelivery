@@ -49,26 +49,20 @@ export function useUser() {
     }
   }
 
-  async function update(data: UserDatabase) {
-    const statement = await database.prepareAsync(
-      "UPDATE users SET name = $name, quantity = $quantity WHERE id = $id"
-    )
+  async function update(data: Omit<UserDatabase, 'password'>, id: number) {
+    const query = `UPDATE users SET name = '${data.name}', email = '${data.email}' WHERE id = ${id}`;
 
     try {
-      await statement.executeAsync({
-        $id: data.id,
-        $name: data.name,
-        $password: data.password,
-        $email: data.email
-      })
+      await database.execAsync(query)
+      const user = show(id)
+
+      if(user) return user
     } catch (error) {
       throw error
-    } finally {
-      await statement.finalizeAsync()
     }
   }
 
-  async function remove(id: number) {
+  async function removeUser(id: number) {
     try {
       await database.execAsync("DELETE FROM users WHERE id = " + id)
     } catch (error) {
@@ -84,7 +78,8 @@ export function useUser() {
         id,
       ])
 
-      return response
+      if(response) return {email: response.email, id: response.id, name: response.name}
+
     } catch (error) {
       throw error
     }
@@ -118,5 +113,5 @@ export function useUser() {
     }
   }
 
-  return { create, searchByName, update, remove, show, getAll, userSession }
+  return { create, searchByName, update, removeUser, show, getAll, userSession }
 }
