@@ -1,129 +1,65 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Image, Platform, Pressable, Text } from "react-native";
 
-import { Collapsible } from "../../../components/Collapsible";
-import { ExternalLink } from "../../../components/ExternalLink";
-import ParallaxScrollView from "../../../components/ParallaxScrollView";
-import { ThemedText } from "../../../components/ThemedText";
-import { ThemedView } from "../../../components/ThemedView";
+import { Pressable, Text, ImageBackground, View } from "react-native";
+
 import { useSession } from "@/contexts/auth";
+import HeaderLogin from "@/assets/images/login/header-login.jpg";
+import { Button } from "@/components/ui/Button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/Avatar";
+import ProfileInfo from "@/components/Profile/ProfileInfo"
+import { Dialog, DialogContent, DialogTrigger, useDialog } from "@/components/ui/Dialog";
+
+
 
 export default function TabThreeScreen() {
-  const { signOut } = useSession();
+  const { signOut, session } = useSession();
+  const {open, setOpen} = useDialog();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={
-        <Ionicons size={310} name="code-slash" style={styles.headerImage} />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">PERFIL</ThemedText>
-      </ThemedView>
-      <ThemedText>
-        This app includes example code to help you get started.
-      </ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          and{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-          in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the{" "}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
-        </ThemedText>
-        <Image
-          source={require("../../../assets/images/react-logo.png")}
-          style={{ alignSelf: "center" }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-          to see how to load{" "}
-          <ThemedText style={{ fontFamily: "SpaceMono" }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{" "}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user's current color scheme is, and so you
-          can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{" "}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{" "}
-          component uses the powerful{" "}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{" "}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{" "}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{" "}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-      <Pressable onPress={signOut}>
-        <Text>Sair</Text>
-      </Pressable>
-    </ParallaxScrollView>
+    
+    <>
+      <ImageBackground
+          className="h-1/3 flex flex-col justify-center items-center"
+          source={HeaderLogin}
+          blurRadius={4}
+          
+        >
+        <View className="w-full h-full bg-black/70 justify-center items-center">
+        <Avatar className="w-40 h-40">
+          <AvatarImage src="https://avatars.githubusercontent.com/u/128909474?v=4"/>
+          <AvatarFallback>
+              AD
+          </AvatarFallback>
+        </Avatar>
+        </View>
+        
+        
+        </ImageBackground>
+
+      <View className="px-3 gap-3">
+        <ProfileInfo text={session.name} onPress={()=> {}}/>
+        <ProfileInfo text={session.email} onPress={()=> {}}/>
+        
+        
+        <Button text="Sair" onPress={signOut}/>
+
+        <View className="flex gap-2">
+            <Text className="font-semibold text-xl text-primary">Dialog</Text>
+            <Dialog>
+              <DialogTrigger>
+                <Text>Teste</Text>
+              </DialogTrigger>
+              <DialogContent>
+                <View className="flex gap-4">
+                  <Text className="font-semibold text-xl text-primary">Dialog Content</Text>
+                  <Text className="text-primary">
+                    Tap outside the dialog to close it.
+                  </Text>
+                </View>
+              </DialogContent>
+            </Dialog>
+          </View>
+      </View>
+    </>
+    
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
-  },
-});
