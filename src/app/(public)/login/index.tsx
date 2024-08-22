@@ -8,10 +8,11 @@ import { loginFormSchema, LoginForm } from "@/domain/formSchemas/auth/login";
 import { useSession } from "@/contexts/auth";
 
 import HeaderLogin from "@/assets/images/login/header-login.jpg";
+import { Button } from "@/components/ui/Button";
 
 export default function Login() {
   const { signIn } = useSession();
-  const { userSession, create } = useUser();
+  const { userSession } = useUser();
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: yupResolver(loginFormSchema),
   });
@@ -24,10 +25,8 @@ export default function Login() {
       router.replace("/(auth)/");
       return;
     }
-
-    create({ ...data, name: "Victor Cassiano" });
   };
-
+  
   return (
     <View className="flex-1 justify-center">
       <ImageBackground
@@ -36,11 +35,12 @@ export default function Login() {
         blurRadius={4}
       >
         <View className="bg-slate-900/70 w-full h-full rounded-md p-4 backdrop-blur-md flex flex-col justify-center items-center">
-          <Text className="text-3xl text-white font-bold">Bem-vindo</Text>
+          <Text className="text-3xl text-white font-bold">Login</Text>
         </View>
       </ImageBackground>
 
       <View className="bg-white flex-1 p-4 gap-y-5">
+
         <ControllerTextInput
           control={control}
           name="email"
@@ -55,21 +55,18 @@ export default function Login() {
           placeholder="Digite sua senha"
           passwordType
         />
+        
 
-        <Pressable
+        <Button text="Entrar"
           onPress={handleSubmit(onSubmit)}
-          className="bg-red-700 rounded-md p-2 border flex flex-row items-center justify-center h-12"
-        >
-          <Text className="text-white text-lg">Entrar</Text>
-        </Pressable>
+          />
 
-        <View className="flex-row gap-1 items-center justify-center mt-4">
-          <Text className="text-slate-700 text-sm">
+        <View className="flex-row gap-3 items-center justify-center mt-4">
+          <Text className="text-slate-700 text-lg">
             Ainda não tem uma conta?
           </Text>
-          <Pressable onPress={() => console.log("Clickou no Cadastrar")}>
-            <Text className="text-red-700 text-lg">Cadastrar-se</Text>
-          </Pressable>
+          <Button text="Cadastrar-se" onPress={() => router.push("/(public)/signup")} variant="link"/>
+
         </View>
       </View>
     </View>
