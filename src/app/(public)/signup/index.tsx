@@ -4,20 +4,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { router } from "expo-router";
 import { ControllerTextInput } from "@/components/controller/controlledTextInput";
-import { loginFormSchema, LoginForm } from "@/domain/formSchemas/auth/login";
+import { signUpFormSchema, SignUpForm } from "@/domain/formSchemas/auth/signup";
 import { useSession } from "@/contexts/auth";
 
 import HeaderLogin from "@/assets/images/login/header-login.jpg";
 import { Button } from "@/components/ui/Button";
 
-export default function Login() {
+export default function SignUp() {
   const { signIn } = useSession();
   const { create } = useUser();
-  const { control, handleSubmit } = useForm<LoginForm>({
-    resolver: yupResolver(loginFormSchema),
+  const { control, handleSubmit } = useForm<SignUpForm>({
+    resolver: yupResolver(signUpFormSchema),
   });
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: SignUpForm) => {
     try {
       const user = await create(data);
       await signIn(user);
