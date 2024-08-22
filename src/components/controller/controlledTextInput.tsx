@@ -39,7 +39,9 @@ export function ControllerTextInput<FormType extends FieldValues>({
             ) : null}
           </View>
           {error?.message ? (
-            <Text className="text-red-700 -mt-4">{error.message}</Text>
+            <Text className="text-red-700 font-bold -mt-4">
+              {error.message}
+            </Text>
           ) : null}
         </>
       )}
