@@ -34,7 +34,7 @@ export default function SignUp() {
         source={HeaderLogin}
         blurRadius={4}
       >
-        <View className="bg-slate-900/70 w-full h-full rounded-md p-4 backdrop-blur-md flex flex-col justify-center items-center">
+        <View className="bg-black/70 w-full h-full rounded-md p-4 backdrop-blur-md flex flex-col justify-center items-center">
           <Text className="text-3xl text-white font-bold">CADASTRO</Text>
         </View>
       </ImageBackground>
