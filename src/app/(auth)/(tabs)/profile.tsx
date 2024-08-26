@@ -20,15 +20,19 @@ type ModalProps = {
 } | null;
 
 export default function TabThreeScreen() {
-  const { update } = useUser();
+  const { update, removeUser } = useUser();
   const { control, handleSubmit } = useForm<{ value: string }>({
     resolver: yupResolver(changeUserFormSchema),
   });
   const { signOut, session, signIn } = useSession();
   const [showChangeModal, setShowChangeModal] = useState<ModalProps>(null);
   const [showModalExit, setModalExit] = useState(false);
+  const [showModalDelete, setModalDelete] = useState(false);
+
 
   const hideDialog = () => setShowChangeModal(null);
+
+  const hideDialogDelete = () => setModalDelete((prev) => !prev);
 
   const toggleModalExit = () => setModalExit((prev) => !prev);
 
@@ -51,6 +55,8 @@ export default function TabThreeScreen() {
       hideDialog();
     }
   };
+
+
 
   return (
     <>
@@ -88,7 +94,8 @@ export default function TabThreeScreen() {
           <Ionicons name="at-circle" size={26} color={"#334155"} />
         </ProfileInfo>
 
-        <Button text="Sair" onPress={signOut} />
+        <Button text="Excluir Conta" onPress={() => setModalDelete(true)} />
+        <Button text="Sair" onPress={() => setModalExit(true)} />
       </View>
 
       <Dialog visible={Boolean(showChangeModal)} onDismiss={hideDialog}>
@@ -129,7 +136,7 @@ export default function TabThreeScreen() {
             variant="link"
           />
           <Button
-            text="Salvar"
+            text="Sair"
             onPress={async () => {
               await signOut();
               toggleModalExit();
@@ -138,6 +145,29 @@ export default function TabThreeScreen() {
           />
         </Dialog.Actions>
       </Dialog>
+
+      <Dialog visible={showModalDelete} onDismiss={hideDialogDelete}>
+        <Dialog.Title>Deseja realmente excluir sua conta?</Dialog.Title>
+
+        <Dialog.Actions>
+          <Button
+            text="Não deletar"
+            onPress={hideDialogDelete}
+            className="p-2"
+            variant="link"
+          />
+          <Button
+            text="Deletar"
+            onPress={ async ()=>{
+            await removeUser(session.id)
+            await signOut();
+            }
+              
+            }
+            className="p-2"
+          />
+        </Dialog.Actions>
+      </Dialog>
     </>
-  );
+)
 }
