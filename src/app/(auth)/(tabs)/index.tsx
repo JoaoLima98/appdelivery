@@ -9,7 +9,10 @@ import { Stores } from "@/components/stores";
 
 export default function HomeScreen() {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} className="mt-5">
+    <ScrollView 
+    showsVerticalScrollIndicator={false} 
+    overScrollMode="never" 
+    className="mt-5">
       <Header />
       <View className="px-5 mt-5">
         <Search />
