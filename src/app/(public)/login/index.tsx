@@ -10,13 +10,26 @@ import { useSession } from "@/contexts/auth";
 import HeaderLogin from "@/assets/images/login/header-login.jpg";
 import { Button } from "@/components/ui/Button";
 import { useLayoutEffect } from "react";
+import {useTable} from "@/hooks/useTable"
+
 
 export default function Login() {
+  const {populationStoresTable, populationFoodsTable} = useTable();
   const { signIn, session } = useSession();
   const { userSession } = useUser();
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: yupResolver(loginFormSchema),
   });
+
+  async function populate(){
+   
+    try {
+      await populationFoodsTable();
+      await populationStoresTable();
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const onSubmit = async (data: LoginForm) => {
     const user = await userSession(data);
@@ -76,7 +89,9 @@ export default function Login() {
             variant="link"
           />
         </View>
+        <Button text=""onPress={populate} className="bg-white"></Button>
       </View>
+      
     </View>
   );
 }
