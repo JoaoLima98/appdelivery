@@ -31,5 +31,12 @@ export async function initializeDatabase(database: SQLiteDatabase) {
         restaurantId INTEGER
       );
     `)
+
+    await database.execAsync(`
+      CREATE TABLE IF NOT EXISTS cart (
+        id INTEGER PRIMARY KEY,
+        id_user INTEGER NOT NULL,
+        id_food INTEGER NOT NULL
+      );
+    `)
   }
-  

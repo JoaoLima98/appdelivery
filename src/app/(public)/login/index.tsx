@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ImageBackground } from "react-native";
+import { View, Text, ImageBackground } from "react-native";
 import { useUser } from "@/hooks/useUser";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -10,24 +10,22 @@ import { useSession } from "@/contexts/auth";
 import HeaderLogin from "@/assets/images/login/header-login.jpg";
 import { Button } from "@/components/ui/Button";
 import { useLayoutEffect } from "react";
-import {useTable} from "@/hooks/useTable"
-
+import { useTable } from "@/hooks/useTable";
 
 export default function Login() {
-  const {populationStoresTable, populationFoodsTable} = useTable();
+  const { populationStoresTable, populationFoodsTable } = useTable();
   const { signIn, session } = useSession();
   const { userSession } = useUser();
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: yupResolver(loginFormSchema),
   });
 
-  async function populate(){
-   
+  async function populate() {
     try {
-      await populationFoodsTable();
       await populationStoresTable();
+      await populationFoodsTable();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -89,9 +87,8 @@ export default function Login() {
             variant="link"
           />
         </View>
-        <Button text=""onPress={populate} className="bg-white"></Button>
+        <Button text="" onPress={populate} />
       </View>
-      
     </View>
   );
 }
