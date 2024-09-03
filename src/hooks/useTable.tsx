@@ -1,10 +1,14 @@
 import { useSQLiteContext } from "expo-sqlite";
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 
 type TableStoresContextProps = {
   populationStoresTable: () => Promise<void>;
   populationFoodsTable: () => Promise<void>;
-  showPopulations: () => Promise<{foods: TableFoodsProps[], stores: TableStoresProps[]}>;
+  showUsers: () => Promise<void>;
+  showPopulations: () => Promise<{
+    foods: TableFoodsProps[];
+    stores: TableStoresProps[];
+  }>;
 };
 
 export type TableStoresProps = {
@@ -33,10 +37,10 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
   const database = useSQLiteContext();
 
   const populationStoresTable = async () => {
-    const populationS = (await showPopulations()).stores      
-    if (populationS.length) return
+    const populationS = (await showPopulations()).stores;
+    if (populationS.length) return;
     const responseStores = await fetch("http://192.168.100.4:3000/restaurants");
-    const dataStores: TableStoresProps[] = await responseStores.json();    
+    const dataStores: TableStoresProps[] = await responseStores.json();
     async function create(data: Omit<TableStoresProps, "id">) {
       const statement = await database.prepareAsync(
         "INSERT INTO stores (name, image, rate) VALUES ($name, $image, $rate)",
@@ -48,11 +52,8 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
           $image: data.image,
           $rate: data.rate,
         });
-        
       } catch (error) {
         throw error;
-      } finally {
-        await statement.finalizeAsync();
       }
     }
 
@@ -64,19 +65,17 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const populationFoodsTable = async () => {
-    const populationF = (await showPopulations()).foods
-    if (populationF.length) return
+    const populationF = (await showPopulations()).foods;
+    if (populationF.length) return;
     const responseFoods = await fetch("http://192.168.100.4:3000/foods");
     const dataFoods: TableFoodsProps[] = await responseFoods.json();
 
     async function create(data: Omit<TableFoodsProps, "id">) {
-
-
       const statement = await database.prepareAsync(
         "INSERT INTO foods (name, price, time, delivery, rating, image, restaurantID) VALUES ($name, $price, $time, $delivery, $rating, $image, $restaurantID)",
       );
       try {
-       await statement.executeAsync({
+        await statement.executeAsync({
           $name: data.name,
           $price: data.price,
           $time: data.time,
@@ -87,8 +86,6 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
         });
       } catch (error) {
         throw error;
-      } finally {
-        await statement.finalizeAsync();
       }
     }
 
@@ -110,15 +107,31 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
       const responseFoods =
         await database.getAllAsync<TableFoodsProps>(queryFoods);
 
-      return {foods: responseFoods as TableFoodsProps[], stores: responseStores as TableStoresProps[]}
+      return {
+        foods: responseFoods as TableFoodsProps[],
+        stores: responseStores as TableStoresProps[],
+      };
     } catch (error) {
       throw error;
     }
   };
 
+  const showUsers = async () => {
+    const query = "SELECT * FROM users";
+
+    const response = await database.getAllAsync<TableStoresProps>(query);
+
+    console.log(response);
+  };
+
   return (
     <TableContext.Provider
-      value={{ populationStoresTable, populationFoodsTable, showPopulations }}
+      value={{
+        populationStoresTable,
+        populationFoodsTable,
+        showPopulations,
+        showUsers,
+      }}
     >
       {children}
     </TableContext.Provider>
