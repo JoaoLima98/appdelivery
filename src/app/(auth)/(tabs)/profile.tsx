@@ -12,7 +12,7 @@ import { Dialog } from "react-native-paper";
 import { ControllerTextInput } from "@/components/controller/controlledTextInput";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { changeUserFormSchema } from "@/domain/formSchemas/profile/changeUser";
+import { ChangeForm, changeUserFormSchema } from "@/domain/formSchemas/profile/changeUser";
 
 type ModalProps = {
   key: string | undefined;
@@ -21,38 +21,40 @@ type ModalProps = {
 
 export default function TabThreeScreen() {
   const { update, removeUser } = useUser();
-  const { control, handleSubmit } = useForm<{ value: string }>({
+  const { control, handleSubmit } = useForm<ChangeForm>({
     resolver: yupResolver(changeUserFormSchema),
   });
   const { signOut, session, signIn } = useSession();
-  const [showChangeModal, setShowChangeModal] = useState<ModalProps>(null);
+  const [showChangeModalEmail, setShowChangeModalEmail] = useState<ModalProps>(null);
+  const [showChangeModalName, setShowChangeModalName] = useState<ModalProps>(null);
   const [showModalExit, setModalExit] = useState(false);
   const [showModalDelete, setModalDelete] = useState(false);
 
 
-  const hideDialog = () => setShowChangeModal(null);
+  const hideDialogEmail = () => setShowChangeModalEmail(null);
+  const hideDialogName = () => setShowChangeModalName(null);
 
   const hideDialogDelete = () => setModalDelete((prev) => !prev);
 
   const toggleModalExit = () => setModalExit((prev) => !prev);
 
-  const onSubmit = async (data: { value: string }) => {
-    if (session && showChangeModal?.key === "Nome") {
+  const onSubmit = async (data:  ChangeForm) => {
+    if (session && showChangeModalName?.key) {
       const userUpdate = await update(
-        { ...session, name: data.value },
+        { ...session, name: data.name },
         session.id,
       );
       await signIn(userUpdate!);
-      hideDialog();
+      hideDialogName();
     }
 
-    if (session && showChangeModal?.key === "Email") {
+    if (session && showChangeModalEmail?.key === "Email") {
       const userUpdate = await update(
-        { ...session, email: data.value },
+        { ...session, email: data.email },
         session.id,
       );
       await signIn(userUpdate!);
-      hideDialog();
+      hideDialogEmail();
     }
   };
 
@@ -78,7 +80,7 @@ export default function TabThreeScreen() {
           text={session.name}
           userId={session.id}
           onPress={() =>
-            setShowChangeModal({ key: "Nome", value: session.name })
+            setShowChangeModalName({ key: "Nome", value: session.name })
           }
         >
           <Ionicons name="person" size={26} color={"#334155"} />
@@ -88,7 +90,7 @@ export default function TabThreeScreen() {
           text={session.email}
           userId={session.id}
           onPress={() =>
-            setShowChangeModal({ key: "Email", value: session.email })
+            setShowChangeModalEmail({ key: "Email", value: session.email })
           }
         >
           <Ionicons name="at-circle" size={26} color={"#334155"} />
@@ -98,23 +100,23 @@ export default function TabThreeScreen() {
         <Button text="Sair" onPress={() => setModalExit(true)} />
       </View>
 
-      <Dialog visible={Boolean(showChangeModal)} onDismiss={hideDialog}>
+      <Dialog visible={Boolean(showChangeModalName)} onDismiss={hideDialogName}>
         <Dialog.Title>
-          Deseja realmente alterar o {showChangeModal?.key}?
+          Deseja realmente alterar o {showChangeModalName?.key}?
         </Dialog.Title>
         <Dialog.Content>
           <ControllerTextInput
             control={control}
-            name="value"
-            label={showChangeModal?.key}
-            placeholder={showChangeModal?.value}
+            name="name"
+            label={showChangeModalName?.key}
+            placeholder={showChangeModalName?.value}
             messageErrorClassname="mt-0"
           />
         </Dialog.Content>
         <Dialog.Actions>
           <Button
             text="Cancelar"
-            onPress={hideDialog}
+            onPress={hideDialogName}
             className="p-2"
             variant="link"
           />
@@ -125,6 +127,34 @@ export default function TabThreeScreen() {
           />
         </Dialog.Actions>
       </Dialog>
+      <Dialog visible={Boolean(showChangeModalEmail)} onDismiss={hideDialogEmail}>
+        <Dialog.Title>
+          Deseja realmente alterar o {showChangeModalEmail?.key}?
+        </Dialog.Title>
+        <Dialog.Content>
+          <ControllerTextInput
+            control={control}
+            name="email"
+            label={showChangeModalEmail?.key}
+            placeholder={showChangeModalEmail?.value}
+            messageErrorClassname="mt-0"
+          />
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button
+            text="Cancelar"
+            onPress={hideDialogEmail}
+            className="p-2"
+            variant="link"
+          />
+          <Button
+            text="Salvar"
+            onPress={handleSubmit(onSubmit)}
+            className="p-2"
+          />
+        </Dialog.Actions>
+      </Dialog>
+      
       <Dialog visible={showModalExit} onDismiss={toggleModalExit}>
         <Dialog.Title>Deseja realmente sair do App Delivery?</Dialog.Title>
 
