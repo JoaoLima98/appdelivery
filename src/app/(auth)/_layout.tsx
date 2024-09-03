@@ -15,6 +15,7 @@ export default function AuthLayout() {
     <AllProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="location/index" />
       </Stack>
     </AllProvider>
   );

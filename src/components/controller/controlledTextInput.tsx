@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { Controller, UseControllerProps, FieldValues } from "react-hook-form";
 import { Input, InputProps } from "../ui/Input";
