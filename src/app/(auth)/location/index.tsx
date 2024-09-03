@@ -19,7 +19,7 @@ const Location = () => {
     longitudeDelta: 0.1,
   });
 
-  const { control, handleSubmit, getValues, setValue } = useForm();
+  const { control, handleSubmit, getValues, setValue, formState: { errors } } = useForm();
 
   const searchCEP = async ({ cep }: any) => {
     const response = await fetch(
@@ -64,15 +64,24 @@ const Location = () => {
       <Controller
         control={control}
         name="cep"
+        rules={{
+          required: "O CEP é obrigatório.",
+          pattern: {
+            value: /^[0-9]{8}$/,
+            message: "O CEP deve conter exatamente 8 dígitos numéricos.",
+          },
+        }}
         render={({ field }) => (
           <View className="flex-row items-center justify-between gap-3 mt-5">
             <Input
               onChangeText={field.onChange}
               onBlur={field.onBlur}
+              value={field.value}
               className="flex-1"
               placeholder="Digite seu CEP"
               cursorColor="#b91c1c"
               defaultValue={cep}
+              keyboardType="numeric"
             />
             <Pressable
               className="p-3 bg-primary rounded-full"
@@ -83,6 +92,9 @@ const Location = () => {
           </View>
         )}
       />
+      {errors.cep && (
+        <Text className="text-red-600 mt-1">{errors.cep.message}</Text>
+      )}
 
       <MapView
         style={{
