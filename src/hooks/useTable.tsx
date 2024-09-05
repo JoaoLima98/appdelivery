@@ -39,7 +39,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
   const populationStoresTable = async () => {
     const populationS = (await showPopulations()).stores;
     if (populationS.length) return;
-    const responseStores = await fetch("http://192.168.100.4:3000/restaurants");
+    const responseStores = await fetch("http://192.168.100.7:3000/restaurants");
     const dataStores: TableStoresProps[] = await responseStores.json();
     async function create(data: Omit<TableStoresProps, "id">) {
       const statement = await database.prepareAsync(
@@ -67,7 +67,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
   const populationFoodsTable = async () => {
     const populationF = (await showPopulations()).foods;
     if (populationF.length) return;
-    const responseFoods = await fetch("http://192.168.100.4:3000/foods");
+    const responseFoods = await fetch("http://192.168.100.7:3000/foods");
     const dataFoods: TableFoodsProps[] = await responseFoods.json();
 
     async function create(data: Omit<TableFoodsProps, "id">) {

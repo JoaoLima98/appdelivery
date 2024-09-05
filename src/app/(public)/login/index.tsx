@@ -13,7 +13,12 @@ import { useLayoutEffect } from "react";
 import { useTable } from "@/hooks/useTable";
 
 export default function Login() {
-  const { populationStoresTable, populationFoodsTable } = useTable();
+  const {
+    populationStoresTable,
+    populationFoodsTable,
+    showPopulations,
+    showUsers,
+  } = useTable();
   const { signIn, session } = useSession();
   const { userSession } = useUser();
   const { control, handleSubmit } = useForm<LoginForm>({
@@ -24,6 +29,9 @@ export default function Login() {
     try {
       await populationStoresTable();
       await populationFoodsTable();
+      const pop = await showPopulations();
+      await showUsers();
+      console.log(pop);
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +95,7 @@ export default function Login() {
             variant="link"
           />
         </View>
-        <Button text="" onPress={populate} />
+        <Button text="" onPress={populate} className="invisible" />
       </View>
     </View>
   );
