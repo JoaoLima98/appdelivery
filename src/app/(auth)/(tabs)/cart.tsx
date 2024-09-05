@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Button as RNButton, Alert } from "react-native";
+import { View, Text, FlatList, Alert } from "react-native";
 import React, { useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
@@ -7,12 +7,11 @@ import * as Notifications from "expo-notifications";
 import { useSession } from "@/contexts/auth";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Modal from "react-native-modal";
-import { TextInput } from "react-native-paper";
 
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { formatCurrency } from "@/utils/format-currency";
 import { useCart } from "@/hooks/useCart";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 interface FoodProperties {
   id: number;
@@ -35,14 +34,11 @@ interface CartResponse {
 }
 
 export default function TabTwoScreen() {
+  const { getItem } = useAsyncStorage("@cep");
   const [foods, setFoods] = useState<CartResponse>();
+  const [cep, setCEP] = useState<string>();
   const { session } = useSession();
   const { getCartByIdUser, removeFromCartByUser } = useCart();
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   async function displayNotification() {
     await Notifications.scheduleNotificationAsync({
@@ -55,8 +51,9 @@ export default function TabTwoScreen() {
   }
 
   const getCart = async () => {
+    const cepItem = await getItem();
     const foodFiltered = await getCartByIdUser(session.id);
-
+    setCEP(cepItem || "");
     setFoods(foodFiltered);
   };
 
@@ -144,28 +141,15 @@ export default function TabTwoScreen() {
           <Text className="text-primary ml-2">Endereço</Text>
         </View>
         <View className="h-25 flex-row items-center justify-between">
-          <Button
-            text="Adicionar endereço"
-            className="px-2 rounded-2xl w-36"
-            onPress={toggleModal}
-          />
-          <Modal
-            isVisible={isModalVisible}
-            onBackdropPress={toggleModal}
-            style={{ justifyContent: "flex-end", margin: 0 }}
-          >
-            <View
-              style={{
-                backgroundColor: "white",
-                padding: 20,
-                borderRadius: 10,
-              }}
-            >
-              <Text>Digite seu Cep:</Text>
-              <TextInput placeholder="CEP"></TextInput>
-              <RNButton title="Cancelar" onPress={toggleModal} />
-            </View>
-          </Modal>
+          {cep ? (
+            <Text onPress={() => router.push("/(auth)/location")}>{cep}</Text>
+          ) : (
+            <Button
+              text="Adicionar"
+              className="px-2 rounded-2xl w-36"
+              onPress={() => router.push("/(auth)/location")}
+            />
+          )}
         </View>
       </View>
       <View className="h-25 flex-row items-center justify-between p-2">
